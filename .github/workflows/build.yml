@@ -35,7 +35,6 @@ jobs:
           export TITLE=CERNBox
           export SOURCE_MAP=true
           export REQUIRE_TIMEOUT=20
-          export CDN=true
 
           cd web
           yarn link ../owncloud-sdk
