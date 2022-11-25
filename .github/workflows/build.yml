@@ -16,28 +16,23 @@ jobs:
           repository: cernbox/web
           path: web
           token: ${{ secrets.GHCR_TOKEN }}
-      - name: Checkout SDK
-        uses: actions/checkout@v3
-        with:
-          repository: cernbox/owncloud-sdk
-          path: owncloud-sdk
       - name: Install node
         uses: actions/setup-node@v3
         with:
           node-version: 14
-      - name: Build SDK
-        run: |
-          cd owncloud-sdk
-          yarn install
-          yarn build:system
+      - uses: pnpm/action-setup@v2
+        name: Install pnpm
+        id: pnpm-install
+        with:
+          version: 7
       - name: Build Web
         run: |
           export TITLE=CERNBox
           export SOURCE_MAP=true
           export REQUIRE_TIMEOUT=20
+          export DOCUMENTATION_URL="https://cernbox.docs.cern.ch/web/#desktop-requirements"
 
           cd web
-          yarn link ../owncloud-sdk
           make dist
       - name: Create release
         run: |
