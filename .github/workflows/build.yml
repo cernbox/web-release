@@ -5,6 +5,7 @@ on:
   push:
     tags:
        - 'v*'
+       - 'dev-*'
 
 jobs:
   build-publish:
@@ -42,9 +43,10 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           draft: false
-          prerelease: false
+          prerelease: ${{ startsWith(github.ref_name, 'dev-') }}
           files: release/web.tar.gz
       - name: Create tag in web repo
+        if: startsWith(github.ref_name, 'v')
         run: |
           cd web
           git tag ${GITHUB_REF/refs\/tags\//}
