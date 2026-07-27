@@ -14,10 +14,19 @@ jobs:
   build-publish:
     runs-on: ubuntu-latest
     steps:
+      - name: Determine web ref
+        id: web-ref
+        run: |
+          if [[ "$GITHUB_REF_NAME" == dev-* ]]; then
+            echo "ref=dev" >> "$GITHUB_OUTPUT"
+          else
+            echo "ref=" >> "$GITHUB_OUTPUT"
+          fi
       - name: Checkout Web
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: cernbox/web
+          ref: ${{ steps.web-ref.outputs.ref }}
           path: web
           token: ${{ secrets.GHCR_TOKEN }}
       - name: Install node
