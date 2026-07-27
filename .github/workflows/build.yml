@@ -26,6 +26,15 @@ jobs:
         id: pnpm-install
         with:
           version: 9
+      - name: Set web package version
+        working-directory: web
+        run: |
+          if [[ "$GITHUB_REF_NAME" == v* ]]; then
+            VERSION="${GITHUB_REF_NAME#v}"
+          else
+            VERSION="$GITHUB_REF_NAME"
+          fi
+          npm pkg set version="$VERSION"
       - name: Build Web
         run: |
           export TITLE=CERNBox
